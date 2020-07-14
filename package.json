@@ -2,8 +2,12 @@
   "name": "@brightspace/custom-teacher-course-creation",
   "description": "",
   "repository": "https://github.com/Brightspace/custom-teacher-course-creation.git",
-  "publishConfig": { "access": "public" },
-  "files": [ "custom-teacher-course-creation.js" ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "custom-teacher-course-creation.js"
+  ],
   "scripts": {
     "lint": "npm run lint:eslint && npm run lint:lit",
     "lint:eslint": "eslint . --ext .js,.html",
@@ -23,6 +27,8 @@
     "@brightspace-ui/visual-diff": "^1",
     "@open-wc/testing": "^2",
     "@open-wc/testing-karma": "^3",
+    "@semantic-release/git": "^9.0.0",
+    "@semantic-release/github": "^7.0.7",
     "babel-eslint": "^10",
     "deepmerge": "^3",
     "es-dev-server": "^1",
@@ -31,14 +37,30 @@
     "eslint-plugin-html": "^6",
     "eslint-plugin-lit": "^1",
     "eslint-plugin-sort-class-members": "^1",
-    "frau-ci": "^1",
     "karma-sauce-launcher": "^2",
     "lit-analyzer": "^1",
-    "puppeteer": "^4"
+    "puppeteer": "^4",
+    "semantic-release": "^17.1.1"
   },
   "dependencies": {
     "@brightspace-ui/core": "^1",
     "@webcomponents/webcomponentsjs": "^2",
     "lit-element": "^2"
+  },
+  "release": {
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/github",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]"
+        }
+      ]
+    ]
   }
 }

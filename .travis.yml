@@ -12,19 +12,14 @@ script:
     echo "Not a pull request and/or no secure environment variables, running headless tests...";
     npm run test:headless || travis_terminate 1;
   fi
-after_success:
-- frauci-update-version -d=skip && export TRAVIS_TAG=$(frauci-get-version)
 env:
   global:
   - SAUCE_USERNAME: Desire2Learn
   - REPO_NAME=custom-teacher-course-creation
   - OWNER_NAME=BrightspaceUI
+  # GITHUB_TOKEN 6a9c......f22f
+  - secure: mNhYjRN52gAMdwgsHstk1xruHRydPw75k6sJmM+4ya/286EMimvk4zS7NyZpbLFIDQvHhO29mHfuA+tfFxJNEAGU5XJQvpelzgu2MK+DtwjfP2yiyEfGPPr3F8w/5a4EWUU4s9GQNducWeEPIk5w5Jtah6FmSmO2t34QJR39yhpRUok5gZuF5w/o30HX0eviZLsCRtygCa7zmqUcB9iVuXtEy+3dFsP3cp3+vXPiLpjCPMEdMuxMyBpy7oGD/5kiYV0IJOWfjAAB8h55VdikxSA9/ZPKpz4/WTXKTlUIkkUFFP7TsZ6VH2xNmqrMqmeq7D7wHO4JqXeD5NrvxTBwwRxUK7zN0IImE+z7sgZZa+w7Uqq1PrwjTy6w0d+X4T6soXQspF6qD65ghkHwWnbpEkPb/8JMK4VfWuKgHYSvn32UY9hmWNEc/rGTqWQmpcyjFhRf55k3s6Ls73//Z9sVE3ndRvIrZKqME/zH1ujO+lCYe/vdppP+HF9rvxNGFlBJBM6XkLRcrP0FcZaYpMeLvGOmmmtfEIHxz3G3171HW3ZF3zXVM2GzhmPv5fYXWWISPw02b3u5YyalQHCY6Ve4Al4SQx7y7BLy8Zy3MDgiRUSUSBc0DCz1TCvbvy+ft+ZDEf71Ulufz3zwsYhSIzCYsyxy2R/DYLeCZg0A1mLMM2Q=
 deploy:
-  - provider: npm
-    email: d2ltravisdeploy@d2l.com
-    skip_cleanup: true
-    api_key:
-      # d2l-travis-deploy: ...
-    on:
-      tags: true
-      repo: BrightspaceUI/custom-teacher-course-creation
+- provider: script
+  skip_cleanup: true
+  script: npx semantic-release
