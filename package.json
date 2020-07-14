@@ -48,7 +48,6 @@
     "lit-element": "^2"
   },
   "release": {
-    "dryRun": true,
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/github",
