@@ -1,7 +1,7 @@
 {
-  "name": "@brightspace-ui/custom-teacher-course-creation",
+  "name": "@brightspace/custom-teacher-course-creation",
   "description": "",
-  "repository": "https://github.com/BrightspaceUI/custom-teacher-course-creation.git",
+  "repository": "https://github.com/Brightspace/custom-teacher-course-creation.git",
   "publishConfig": { "access": "public" },
   "files": [ "custom-teacher-course-creation.js" ],
   "scripts": {
