@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     needs: test
-    if: github.event == 'push' && github.ref == 'refs/heads/master' && "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
+    if: github.ref == 'refs/heads/master' && "! contains(toJSON(github.event.commits.*.message), '[skip ci]')"
 
     steps:
       - name: Install dependencies
