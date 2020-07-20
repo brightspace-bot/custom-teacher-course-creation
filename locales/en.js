@@ -1,3 +1,4 @@
 export const val = {
-	'en': { 'myLangTerm': 'I am a localized string!' }
+	'myLangTerm': 'I am a localized string!',
+	'tccToolName': 'Teacher Course Creation'
 };
