@@ -6,14 +6,14 @@ describe('d2l-teacher-course-creation', () => {
 
 	describe('accessibility', () => {
 		it('should pass all axe tests', async() => {
-			const el = await fixture(html`<d2l-teacher-course-creation></d2l-teacher-course-creation>`);
+			const el = await fixture(html`<d2l-tcc></d2l-tcc>`);
 			await expect(el).to.be.accessible();
 		});
 	});
 
 	describe('constructor', () => {
 		it('should construct', () => {
-			runConstructor('d2l-teacher-course-creation');
+			runConstructor('d2l-tcc');
 		});
 	});
 

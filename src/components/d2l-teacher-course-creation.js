@@ -33,7 +33,7 @@ class TeacherCourseCreation extends BaseMixin(LitElement) {
 	render() {
 		return html`
 			<h2>Hello ${this.prop1}!</h2>
-			<div>Localization Example: ${this.localize('myLangTerm')}</div>
+			<div>Localization Example: ${this.localize('tccToolName')}</div>
 		`;
 	}
 }
