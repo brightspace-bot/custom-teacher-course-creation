@@ -1,9 +1,6 @@
 import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin';
 import { RtlMixin } from '@brightspace-ui/core/mixins/rtl-mixin';
 
-const langTerms = {};
-const baseUrl = import.meta.url;
-
 export const BaseMixin = superclass => class extends RtlMixin(LocalizeMixin(superclass)) {
 	static async getLocalizeResources(langs) {
 		const langPaths = {
