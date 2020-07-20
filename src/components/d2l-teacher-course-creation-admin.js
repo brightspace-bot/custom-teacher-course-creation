@@ -1,7 +1,7 @@
-import { css, html, LitElement } from 'lit-element/lit-element.js';
-import { LocalizeMixin } from '@brightspace-ui/core/mixins/localize-mixin.js';
+import { css, html, LitElement } from 'lit-element/lit-element';
+import { BaseMixin } from '../mixins/base-mixin';
 
-class TeacherCourseCreationAdmin extends LocalizeMixin(LitElement) {
+class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 
 	static get properties() {
 		return {
@@ -20,23 +20,6 @@ class TeacherCourseCreationAdmin extends LocalizeMixin(LitElement) {
 		`;
 	}
 
-	static async getLocalizeResources(langs) {
-		const langResources = {
-			'en': { 'myLangTerm': 'I am a localized string (in the admin page)!' }
-		};
-
-		for (let i = 0; i < langs.length; i++) {
-			if (langResources[langs[i]]) {
-				return {
-					language: langs[i],
-					resources: langResources[langs[i]]
-				};
-			}
-		}
-
-		return null;
-	}
-
 	constructor() {
 		super();
 
@@ -46,8 +29,8 @@ class TeacherCourseCreationAdmin extends LocalizeMixin(LitElement) {
 	render() {
 		return html`
 			<h2>Hello ${this.prop1}!</h2>
-			<div>Localization Example: ${this.localize('myLangTerm')}</div>
+			<div>Localization Example: ${this.localize('tccToolName')}</div>
 		`;
 	}
 }
-customElements.define('d2l-teacher-course-creation-admin', TeacherCourseCreationAdmin);
+customElements.define('d2l-tcc-admin', TeacherCourseCreationAdmin);
