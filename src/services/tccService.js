@@ -1,11 +1,7 @@
 import { Routes } from './routes';
 
-const XSRF_TOKEN = D2L && D2L.LP && D2L.LP.Web && D2L.LP.Web.Authentication &&
-	D2L.LP.Web.Authentication.Xsrf &&
-	D2L.LP.Web.Authentication.Xsrf.GetXsrfToken &&
-	D2L.LP.Web.Authentication.Xsrf.GetXsrfToken() || '';
-
 export class TccService {
+
 	static _getRequest(url) {
 		return this._makeRequest(url, this._options('GET'));
 	}
@@ -27,7 +23,7 @@ export class TccService {
 			credentials: 'include',
 			headers: new Headers({
 				'Access-Control-Allow-Origin': '*',
-				'X-Csrf-Token': XSRF_TOKEN
+				'X-Csrf-Token': this.xsrfToken
 			}),
 			method,
 			mode: 'cors',
@@ -90,5 +86,11 @@ export class TccService {
 			roleId
 		};
 		return await this._putRequest(Routes.CourseConfig(orgUnitId), body);
+	}
+	static get xsrfToken() {
+		return  D2L && D2L.LP && D2L.LP.Web && D2L.LP.Web.Authentication &&
+		D2L.LP.Web.Authentication.Xsrf &&
+		D2L.LP.Web.Authentication.Xsrf.GetXsrfToken &&
+		D2L.LP.Web.Authentication.Xsrf.GetXsrfToken() || '';
 	}
 }
