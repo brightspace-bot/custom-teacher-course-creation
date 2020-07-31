@@ -1,6 +1,9 @@
 import { Routes } from './routes';
 
 export class TccService {
+	static _deleteRequest(url) {
+		fetch(url, this._options('DELETE'));
+	}
 
 	static _getRequest(url) {
 		return this._makeRequest(url, this._options('GET'));
@@ -49,7 +52,8 @@ export class TccService {
 		return await this._postRequest(Routes.CreateCourse(orgUnitId), courseName);
 	}
 
-	static async deleteAssociation() {
+	static async deleteAssociation(orgUnitId) {
+		return await this._deleteRequest(Routes.CourseConfig(orgUnitId));
 	}
 
 	static async getAssociations() {
