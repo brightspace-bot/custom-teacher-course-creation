@@ -8,6 +8,8 @@ import '@brightspace-ui/core/components/menu/menu-item';
 import '@brightspace-ui/core/components/loading-spinner/loading-spinner.js';
 import './dialog/delete-dialog';
 import './dialog/association-dialog';
+import './create-course-admin-nothing-here-illustration';
+import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
 import d2lTableStyles from '../styles/d2lTableStyles';
@@ -46,7 +48,7 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 				display: none;
 			}
 
-			.add_new_button {
+			.tcc-admin__add-new-button {
 				padding: 6px 0px;
 			}
 
@@ -54,10 +56,35 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 				display: flex;
 				margin: 48px;
 			}
+
+			.tcc-admin__description-text {
+				margin-bottom: 0px;
+			}
+
+			.tcc-admin__message--empty-table {
+				text-align: center;
+			}
+
+			.d2l-heading-2.tcc-admin__nothing-title {
+				margin-top: 0;
+				margin-bottom: 18px;
+			}
+
+			.tcc-admin__empty-table-wrapper {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.tcc-admin__get-started-button {
+				margin: 12px;
+				align-self: center;
+			}
 		`;
 		return [
 			d2lTableStyles,
 			tccAdminStyles,
+			bodyStandardStyles,
+			heading2Styles
 		];
 	}
 
@@ -82,10 +109,10 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 		const getDepartmentsPromise = this.tccService.getDepartments();
 		const getAssociationsPromise = this.tccService.getAssociations();
 
-		await Promise.all([getRolesPromise, getDepartmentsPromise, getAssociationsPromise]).then((values) => {
-			this.roles = values[0];
-			this.departments = values[1];
-			this._mapAssociationsArray(values[2]);
+		await Promise.all([getRolesPromise, getDepartmentsPromise, getAssociationsPromise]).then(([roles, departments, associations]) => {
+			this.roles = roles;
+			this.departments = departments;
+			this._mapAssociationsArray(associations);
 
 			this.isLoading = false;
 		});
@@ -181,6 +208,16 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 
 	_renderEmptyTable() {
 		return html`
+			<div class="tcc-admin__message--empty-table">
+				<tcc-admin-nothing-here-illustration>
+				</tcc-admin-nothing-here-illustration>
+				<h1 class="d2l-heading-2 tcc-admin__nothing-title">
+					${this.localize('adminNothingTitle')}
+				</h1>
+				<div class="d2l-body-standard">
+					${this.localize('adminNothingMessage')}
+				</div>
+			</div>
 		`;
 	}
 
@@ -217,15 +254,39 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 	}
 
 	_renderResults() {
-		return html`
-			<d2l-button-subtle
-				class="add_new_button"
-				icon="tier1:plus-large-thick"
-				text="${this.localize('actionNew')}"
-				@click=${this._handleAssociationNew}>
-			</d2l-button-subtle>
-			${this.associations.length > 0 ? this._renderTable() : this._renderEmptyTable()}
+		const isEmpty = this.associations.length === 0;
+
+		const baseTemplate = html`
+			<div class="tcc-admin__description-text d2l-body-standard">
+				${this.localize('adminDesc')}
+			</div>
 		`;
+
+		if (isEmpty) {
+			return html`
+				<div class='tcc-admin__empty-table-wrapper'>
+					${baseTemplate}
+					${this._renderEmptyTable()}
+					<d2l-button
+						primary
+						class="tcc-admin__get-started-button"
+						@click=${this._handleAssociationNew}>
+							${this.localize('actionStart')}
+					</d2l-button>
+				</div>
+			`;
+		} else {
+			return html`
+				${baseTemplate}
+				<d2l-button-subtle
+					class="tcc-admin__add-new-button"
+					icon="tier1:plus-large-thick"
+					text="${this.localize('actionNew')}"
+					@click=${this._handleAssociationNew}>
+				</d2l-button-subtle>
+				${this._renderTable()}
+			`;
+		}
 	}
 
 	_renderSpinner() {
