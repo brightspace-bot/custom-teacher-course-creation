@@ -12,6 +12,7 @@ export const val = {
 	'actionSubmit': 'Submit',
 	'adminCourseTypeDesc': 'The department for the course type that the course will be created under',
 	'adminDesc': 'Each Course Type Association requires a prefix, a suffix, and an instructor role assigned. Add new associations as needed.',
+	'adminPermissionsError': 'You do not have permissions to create course type associations. Please contact your administrator for help.',
 	'adminPrefixDesc': 'The prefix that will be added to the course code',
 	'adminRoleDesc': 'The role that the instructor will be enrolled in the course as',
 	'adminSuffixDesc': 'The suffix that will be added to the course code',

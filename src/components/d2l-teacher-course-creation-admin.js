@@ -6,9 +6,10 @@ import '@brightspace-ui/core/components/icons/icon';
 import '@brightspace-ui/core/components/menu/menu';
 import '@brightspace-ui/core/components/menu/menu-item';
 import '@brightspace-ui/core/components/loading-spinner/loading-spinner.js';
+import './create-course-admin-nothing-here-illustration';
 import './dialog/delete-dialog';
 import './dialog/association-dialog';
-import './create-course-admin-nothing-here-illustration';
+import './widget/d2l-teacher-course-creation-error';
 import { bodyStandardStyles, heading2Styles } from '@brightspace-ui/core/components/typography/styles.js';
 import { css, html, LitElement } from 'lit-element/lit-element';
 import { BaseMixin } from '../mixins/base-mixin';
@@ -32,6 +33,9 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 				type: Object
 			},
 			isLoading: {
+				type: Boolean
+			},
+			permissionError: {
 				type: Boolean
 			}
 		};
@@ -98,6 +102,7 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 		this.tccService = TccServiceFactory.getTccService();
 
 		this.isLoading = true;
+		this.permissionError = false;
 	}
 
 	async connectedCallback() {
@@ -109,13 +114,16 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 		const getDepartmentsPromise = this.tccService.getDepartments();
 		const getAssociationsPromise = this.tccService.getAssociations();
 
-		await Promise.all([getRolesPromise, getDepartmentsPromise, getAssociationsPromise]).then(([roles, departments, associations]) => {
+		try {
+			const [roles, departments, associations] = await Promise.all([getRolesPromise, getDepartmentsPromise, getAssociationsPromise]);
 			this.roles = roles;
 			this.departments = departments;
 			this._mapAssociationsArray(associations);
 
-			this.isLoading = false;
-		});
+		} catch (err) {
+			this.permissionError = err.message.toLowerCase().includes('forbidden') || err.message.toLowerCase().includes('not authorized');
+		}
+		this.isLoading = false;
 
 		this.associationDialog = this.shadowRoot.querySelector('#association-dialog');
 		this.deleteDialog = this.shadowRoot.querySelector('#delete-dialog');
@@ -261,7 +269,13 @@ class TeacherCourseCreationAdmin extends BaseMixin(LitElement) {
 			</div>
 		`;
 
-		if (isEmpty) {
+		if (this.permissionError) {
+			return html`
+				<d2l-tcc-error
+					error-message="${this.localize('adminPermissionsError')}"
+					hide-back>
+				</d2l-tcc-error>`;
+		} else if (isEmpty) {
 			return html`
 				<div class='tcc-admin__empty-table-wrapper'>
 					${baseTemplate}
