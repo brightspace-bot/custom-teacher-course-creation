@@ -110,18 +110,43 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 				display: none;
 			}
 
-			.association_form__input_group {
+			.input_group {
+				margin-top: 12px;
 				margin-bottom: 24px;
 				display: flex;
 				flex-direction: column;
 			}
 
-			.association_form__button_group {
-				margin-top: 78px;
+			.prefix_suffix_group {
+				margin-top: 12px;
+				margin-bottom: 24px;
+				display: flex;
+				flex-direction: row;
+			}
+
+			.prefix_input_group, .suffix_input_group {
+				width: 45%;
+			}
+
+			.prefix_input_group__info_label, .suffix_input_group__info_label {
+				font-style: italic;
+				color: grey;
+				font-size: 0.7rem;
+			}
+
+			.prefix_input_group {
+				padding-right: 5%;
+			}
+
+			.suffix_input_group {
+				padding-left: 5%;
+			}
+
+			.button_group {
 				margin-bottom: 12px;
 			}
 
-			.association_form__button {
+			.button_group__button {
 				width: 102px;
 				margin-right: 12px;
 			}
@@ -315,7 +340,7 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 
 	_renderDepartmentSelector() {
 		return html`
-			<div class="association_form__input_group">
+			<div class="input_group">
 				<label
 					class="d2l-input-label"
 					for=${DEPARTMENT_SELECTOR_ID}>
@@ -326,23 +351,16 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 					class="d2l-input-select"
 					label=${this.localize('departmentSelectLabel')}
 					@change=${this._handleValueChanged}>
-
 					<option value="-1">${this.localize('dialogAssociationDepartmentPlaceholder')}</option>
 					${this._renderDepartmentOptions()}
-
 				</select>
-				<d2l-tooltip
-					for=${DEPARTMENT_SELECTOR_ID}
-					state="info">
-						${this.localize('adminCourseTypeDesc')}
-				</d2l-tooltip>
 			</div>
 		`;
 	}
 
 	_renderPrefixInput() {
 		const prefixInputTemplate = html`
-			<div class="association_form__input_group">
+			<div class="prefix_input_group">
 				<d2l-input-text
 					label="${this.localize('prefix')}"
 					required
@@ -352,6 +370,11 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 					@input=${this._handleValueChanged}
 					novalidate>
 				</d2l-input-text>
+				<label
+					class="prefix_input_group__info_label"
+					for=${PREFIX_INPUT_ID}>
+					${this.localize('dialogAssociationPrefixDescription')}
+				</label>
 			</div>
 		`;
 
@@ -368,21 +391,14 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 						${tooltipMessage}
 				</d2l-tooltip>
 			`;
-		} else {
-			tooltipTemplate = html`
-				<d2l-tooltip
-					for="${PREFIX_INPUT_ID}"
-					state="info">
-						${this.localize('adminPrefixDesc')}
-				</d2l-tooltip>
-			`;
 		}
+
 		return html`${prefixInputTemplate}${tooltipTemplate}`;
 	}
 
 	_renderSuffixInput() {
 		const suffixInputTemplate = html`
-			<div class="association_form__input_group">
+			<div class="suffix_input_group">
 				<d2l-input-text
 					label="${this.localize('suffix')}"
 					required
@@ -392,6 +408,11 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 					@input=${this._handleValueChanged}
 					novalidate>
 				</d2l-input-text>
+				<label
+					class="suffix_input_group__info_label"
+					for=${SUFFIX_INPUT_ID}>
+					${this.localize('dialogAssociationSuffixDescription')}
+				</label>
 			</div>
 		`;
 
@@ -408,41 +429,27 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 						${tooltipMessage}
 				</d2l-tooltip>
 			`;
-		} else {
-			tooltipTemplate = html`
-				<d2l-tooltip
-					for="${SUFFIX_INPUT_ID}"
-					state="info">
-						${this.localize('adminSuffixDesc')}
-				</d2l-tooltip>
-			`;
 		}
+
 		return html`${suffixInputTemplate}${tooltipTemplate}`;
 	}
 
 	_renderRoleSelector() {
 		return html`
-			<div class="association_form__input_group">
+			<div class="input_group">
 				<label
 					class="d2l-input-label"
 					for=${ROLE_SELECTOR_ID}>
-					${this.localize('role')} *
+					${this.localize('roleInputLabel')} *
 				</label>
 				<select
 					id=${ROLE_SELECTOR_ID}
 					class="d2l-input-select"
 					label=${this.localize('roleSelectLabel')}
 					@change=${this._handleValueChanged}>
-
 					<option value="-1">${this.localize('dialogAssociationRolePlaceholder')}</option>
 					${this._renderRoleOptions()}
-
 				</select>
-				<d2l-tooltip
-					for=${ROLE_SELECTOR_ID}
-					state="info">
-						${this.localize('adminRoleDesc')}
-				</d2l-tooltip>
 			</div>
 		`;
 	}
@@ -453,16 +460,19 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 				?opened=${this.associationDialogOpened}
 				title-text="${this._getDialogTitle()}"
 				@d2l-dialog-close=${this._close}>
-				<div class="association_form">
+				<div>
+					${this.localize('dialogAssociationDescription')}
 
 					${this._renderDepartmentSelector()}
-					${this._renderPrefixInput()}
-					${this._renderSuffixInput()}
+					<div class="prefix_suffix_group">
+						${this._renderPrefixInput()}
+						${this._renderSuffixInput()}
+					</div>
 					${this._renderRoleSelector()}
 
-					<div class="association_form__button_group">
+					<div class="button_group">
 						<d2l-button
-							class="association_form__button"
+							class="button_group__button"
 							slot="footer"
 							primary
 							?disabled="${this.nextDisabled}"
@@ -470,7 +480,7 @@ class TccAssociationDialog extends BaseMixin(LitElement) {
 							${this.localize('actionSubmit')}
 						</d2l-button>
 						<d2l-button
-							class="association_form__button"
+							class="button_group__button"
 							slot="footer"
 							@click=${this._close}>
 							${this.localize('actionCancel')}
